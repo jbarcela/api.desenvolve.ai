@@ -1,10 +1,9 @@
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { AbstractEntity } from '../../common/abstract.entity';
+import { UserOutDto } from './dto/user-out.dto';
 
-@Entity({name: 'users'})
-export class UserEntity {
-    @PrimaryGeneratedColumn()
-    id: number;
-
+@Entity({ name: 'users' })
+export class UserEntity extends AbstractEntity<UserOutDto> {
     public name: string;
 
     @Column()
@@ -19,11 +18,5 @@ export class UserEntity {
     @Column('int')
     public receivedPoints: number;
 
-    constructor(name: string, email: string, password: string, points: number, receivedPoints: number) {
-        this.name = name;
-        this.email = email;
-        this.password = password;
-        this.points = points;
-        this.receivedPoints = receivedPoints;
-    }
+    dtoClass = UserOutDto;
 }

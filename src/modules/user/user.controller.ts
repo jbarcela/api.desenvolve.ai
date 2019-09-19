@@ -9,6 +9,7 @@ export class UserController {
 
     @Post()
     async createUser(@Body() userInDto: UserInDto): Promise<UserOutDto> {
-        return this._userService.createUser(userInDto);
+        const createdUser = await this._userService.createUser(userInDto);
+        return createdUser.toDto();
     }
 }
