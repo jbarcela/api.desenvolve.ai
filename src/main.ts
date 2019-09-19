@@ -16,7 +16,7 @@ async function bootstrap() {
 
     const app = await NestFactory.create(AppModule);
 
-    app.use(morgan('dev'));
+    app.use(morgan('combined'));
 
     const configService = app.select(SharedModule).get(ConfigService);
 
