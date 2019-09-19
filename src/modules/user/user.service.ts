@@ -9,6 +9,7 @@ export class UserService {
     async createUser(): Promise<UserEntity> {
         const newUser = new UserEntity();
         newUser.name = 'Jonathan';
+        newUser.lastName = 'Barcela';
         const user = this.userRepository.create(newUser);
         return this.userRepository.save(user);
     }
