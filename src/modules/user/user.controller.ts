@@ -3,7 +3,10 @@ import { UserService } from './user.service';
 import { UserInDto } from './dto/user-in.dto';
 import { UserOutDto } from './dto/user-out.dto';
 
+import { ApiUseTags } from '@nestjs/swagger';
+
 @Controller('users')
+@ApiUseTags('users')
 export class UserController {
     constructor(private _userService: UserService) {}
 

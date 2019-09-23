@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ConfigService } from './shared/services/config.service';
 import { SharedModule } from './shared/shared.module';
+import { setupSwagger } from './shared/swagger';
 
 import * as morgan from 'morgan';
 
@@ -19,6 +20,8 @@ async function bootstrap() {
     app.use(morgan('combined'));
 
     const configService = app.select(SharedModule).get(ConfigService);
+
+    setupSwagger(app);
 
     const port = configService.getNumber('PORT');
     await app.listen(port);

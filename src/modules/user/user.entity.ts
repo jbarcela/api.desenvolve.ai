@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column } from 'typeorm';
 import { AbstractEntity } from '../../common/abstract.entity';
 import { UserOutDto } from './dto/user-out.dto';
 
