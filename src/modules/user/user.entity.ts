@@ -1,6 +1,7 @@
 import { Entity, Column } from 'typeorm';
 import { AbstractEntity } from '../../common/abstract.entity';
 import { UserOutDto } from './dto/user-out.dto';
+import { PasswordTransformer } from './password.transformer';
 
 @Entity({ name: 'users' })
 export class UserEntity extends AbstractEntity<UserOutDto> {
@@ -9,13 +10,13 @@ export class UserEntity extends AbstractEntity<UserOutDto> {
     @Column()
     public email: string;
 
-    @Column()
+    @Column({ transformer: new PasswordTransformer() })
     public password: string;
 
-    @Column('int')
+    @Column({ type: 'int', default: 0, nullable: true })
     public points: number;
 
-    @Column('int')
+    @Column({ type: 'int', default: 0, nullable: true })
     public receivedPoints: number;
 
     dtoClass = UserOutDto;

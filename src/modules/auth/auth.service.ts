@@ -1,0 +1,45 @@
+import {
+    BadRequestException,
+    Injectable,
+    NotFoundException,
+} from '@nestjs/common';
+
+import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from '../../shared/services/config.service';
+import { UserService } from '../user/user.service';
+import { TokenDto } from './dto/token.dto';
+import { LoginInDto } from './dto/login-in.dto';
+import { UserEntity } from '../user/user.entity';
+import * as bcrypt from 'bcrypt';
+
+@Injectable()
+export class AuthService {
+    constructor(
+        public readonly jwtService: JwtService,
+        public readonly configService: ConfigService,
+        public readonly userService: UserService,
+    ) {}
+
+    async createToken(id: string): Promise<TokenDto> {
+        return new TokenDto(
+            this.configService.getNumber('JWT_EXPIRATION_TIME'),
+            await this.jwtService.signAsync({ id }),
+        );
+    }
+
+    async validateUser(loginDto: LoginInDto): Promise<UserEntity> {
+        const { password, email } = loginDto;
+
+        const user = await this.userService.findUser({ email });
+        if (!user) {
+            throw new NotFoundException('User was not found');
+        }
+
+        const isValid = await bcrypt.compare(password, user.password);
+        if (!isValid) {
+            throw new BadRequestException('Invalid credentials');
+        }
+
+        return user;
+    }
+}
