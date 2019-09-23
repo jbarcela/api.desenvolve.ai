@@ -5,16 +5,19 @@ import { ApiModelProperty } from '@nestjs/swagger';
 
 export class UserOutDto extends AbstractDto {
     @ApiModelProperty()
-    public name: string;
+    name: string;
 
     @ApiModelProperty()
-    public email: string;
+    email: string;
 
     @ApiModelProperty()
-    public points: number;
+    points: number;
 
     @ApiModelProperty()
-    public receivedPoints: number;
+    receivedPoints: number;
+
+    @ApiModelProperty()
+    username: string;
 
     constructor(user: UserEntity) {
         super(user);
@@ -22,5 +25,6 @@ export class UserOutDto extends AbstractDto {
         this.email = user.email;
         this.points = user.points;
         this.receivedPoints = user.receivedPoints;
+        this.username = user.username;
     }
 }

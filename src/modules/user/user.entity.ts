@@ -5,19 +5,23 @@ import { PasswordTransformer } from './password.transformer';
 
 @Entity({ name: 'users' })
 export class UserEntity extends AbstractEntity<UserOutDto> {
-    public name: string;
+    @Column()
+    name: string;
 
     @Column()
-    public email: string;
+    email: string;
 
     @Column({ transformer: new PasswordTransformer() })
-    public password: string;
+    password: string;
 
     @Column({ type: 'int', default: 0, nullable: true })
-    public points: number;
+    points: number;
 
     @Column({ type: 'int', default: 0, nullable: true })
-    public receivedPoints: number;
+    receivedPoints: number;
+
+    @Column()
+    username: string;
 
     dtoClass = UserOutDto;
 }
