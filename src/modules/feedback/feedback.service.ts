@@ -3,6 +3,7 @@ import { FeedbackRepository } from './feedback.repository';
 import { FeedbackInDto } from './dto/feedback-in.dto';
 import { Feedback } from './feedback.entity';
 import { UserRepository } from '../user/user.repository';
+import { InsufficientPointsException } from '../../exceptions/InsufficientPointsException';
 
 @Injectable()
 export class FeedbackService {
@@ -13,10 +14,10 @@ export class FeedbackService {
 
     async create(feedbackInDto: FeedbackInDto): Promise<Feedback> {
         const feedback = this.feedbackRepository.create(feedbackInDto);
-        if (this._validatePointsToDonate(feedbackInDto)) {
-            return this.feedbackRepository.save(feedback);
+        if (await this._validatePointsToDonate(feedbackInDto)) {
+            throw new InsufficientPointsException();
         }
-        return new Feedback();
+        return this.feedbackRepository.save(feedback);
     }
 
     async getAllFeedbacks(): Promise<Feedback[]> {
@@ -37,6 +38,6 @@ export class FeedbackService {
         const user = await this.userRepository.findOne({
             id: feedbackInDto.userDonatorId,
         });
-        return user.points > feedbackInDto.points;
+        return user.points < feedbackInDto.points;
     }
 }

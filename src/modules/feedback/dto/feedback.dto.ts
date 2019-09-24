@@ -18,7 +18,12 @@ export class FeedbackDto extends AbstractDto {
         this.points = feedback.points;
         this.message = feedback.message;
 
-        this.donator = feedback.userDonator.toDto();
-        this.receiver = feedback.userReceiver.toDto();
+        if (feedback.userDonator) {
+            this.donator = feedback.userDonator.toDto();
+        }
+
+        if (feedback.userReceiver) {
+            this.receiver = feedback.userReceiver.toDto();
+        }
     }
 }
