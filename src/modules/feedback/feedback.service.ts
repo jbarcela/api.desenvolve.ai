@@ -5,6 +5,7 @@ import { Feedback } from './feedback.entity';
 import { UserRepository } from '../user/user.repository';
 import { InsufficientPointsException } from '../../exceptions/InsufficientPointsException';
 import { User } from '../user/user.entity';
+import { Transactional } from 'typeorm-transactional-cls-hooked';
 
 @Injectable()
 export class FeedbackService {
@@ -13,13 +14,16 @@ export class FeedbackService {
         public readonly userRepository: UserRepository,
     ) {}
 
+    @Transactional()
     async create(feedbackInDto: FeedbackInDto): Promise<Feedback> {
-        const feedback = this.feedbackRepository.create(feedbackInDto);
         if (await this._validatePointsToDonate(feedbackInDto)) {
             throw new InsufficientPointsException();
         }
+
         this._updateDonatorUserPoints(feedbackInDto);
         this._updateReceiverUserPoints(feedbackInDto);
+
+        const feedback = this.feedbackRepository.create(feedbackInDto);
         return this.feedbackRepository.save(feedback);
     }
 
@@ -35,7 +39,9 @@ export class FeedbackService {
         return this.feedbackRepository.findByReceiver(userReceiverId);
     }
 
-    private async _validatePointsToDonate(feedbackInDto: FeedbackInDto): Promise<boolean> {
+    private async _validatePointsToDonate(
+        feedbackInDto: FeedbackInDto,
+    ): Promise<boolean> {
         const user = await this.userRepository.findOne({
             id: feedbackInDto.userDonatorId,
         });
@@ -43,14 +49,18 @@ export class FeedbackService {
     }
 
     private async _updateDonatorUserPoints(feedbackInDto: FeedbackInDto) {
-        const user: User = await this.userRepository.findOne({id: feedbackInDto.userDonatorId});
+        const user: User = await this.userRepository.findOne({
+            id: feedbackInDto.userDonatorId,
+        });
         user.points = +user.points - +feedbackInDto.points;
 
         await this.userRepository.save(user);
     }
 
     private async _updateReceiverUserPoints(feedbackInDto: FeedbackInDto) {
-        const user: User = await this.userRepository.findOne({id: feedbackInDto.userReceiverId});
+        const user: User = await this.userRepository.findOne({
+            id: feedbackInDto.userReceiverId,
+        });
         user.points = +user.points + +feedbackInDto.points;
 
         await this.userRepository.save(user);
