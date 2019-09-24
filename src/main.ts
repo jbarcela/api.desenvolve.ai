@@ -1,4 +1,5 @@
 import { NestFactory } from '@nestjs/core';
+import { ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
 import { ConfigService } from './shared/services/config.service';
 import { SharedModule } from './shared/shared.module';
@@ -20,6 +21,16 @@ async function bootstrap() {
     app.use(morgan('dev'));
 
     const configService = app.select(SharedModule).get(ConfigService);
+
+    app.useGlobalPipes(
+        new ValidationPipe({
+            whitelist: true,
+            transform: true,
+            validationError: {
+                target: false,
+            },
+        }),
+    );
 
     setupSwagger(app);
 

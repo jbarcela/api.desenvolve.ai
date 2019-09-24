@@ -1,5 +1,5 @@
 import { AbstractDto } from '../../../common/dto/abstract.dto';
-import { UserEntity } from '../user.entity';
+import { User } from '../user.entity';
 
 import { ApiModelProperty } from '@nestjs/swagger';
 
@@ -19,7 +19,7 @@ export class UserOutDto extends AbstractDto {
     @ApiModelProperty()
     username: string;
 
-    constructor(user: UserEntity) {
+    constructor(user: User) {
         super(user);
         this.name = user.name;
         this.email = user.email;

@@ -9,7 +9,7 @@ import { ConfigService } from '../../shared/services/config.service';
 import { UserService } from '../user/user.service';
 import { TokenDto } from './dto/token.dto';
 import { LoginInDto } from './dto/login-in.dto';
-import { UserEntity } from '../user/user.entity';
+import { User } from '../user/user.entity';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
@@ -27,7 +27,7 @@ export class AuthService {
         );
     }
 
-    async validateUser(loginDto: LoginInDto): Promise<UserEntity> {
+    async validateUser(loginDto: LoginInDto): Promise<User> {
         const { password, email } = loginDto;
 
         const user = await this.userService.findUser({ email });

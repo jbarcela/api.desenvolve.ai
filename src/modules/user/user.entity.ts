@@ -1,10 +1,12 @@
-import { Entity, Column } from 'typeorm';
+import { Entity, Column, OneToMany } from 'typeorm';
 import { AbstractEntity } from '../../common/abstract.entity';
 import { UserOutDto } from './dto/user-out.dto';
 import { PasswordTransformer } from './password.transformer';
+import { RoleType } from '../../constants/role-type';
+import { Feedback } from '../feedback/feedback.entity';
 
 @Entity({ name: 'users' })
-export class UserEntity extends AbstractEntity<UserOutDto> {
+export class User extends AbstractEntity<UserOutDto> {
     @Column()
     name: string;
 
@@ -22,6 +24,15 @@ export class UserEntity extends AbstractEntity<UserOutDto> {
 
     @Column()
     username: string;
+
+    @Column({ type: 'enum', enum: RoleType, default: RoleType.User })
+    role: RoleType;
+
+    @OneToMany(type => Feedback, feedback => feedback.userDonator)
+    feedbacksAsDonator: Feedback[];
+
+    @OneToMany(type => Feedback, feedback => feedback.userReceiver)
+    feedbacksAsReceiver: Feedback[];
 
     dtoClass = UserOutDto;
 }

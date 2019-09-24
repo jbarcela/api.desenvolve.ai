@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common/decorators';
-import { UserEntity } from './user.entity';
+import { User } from './user.entity';
 import { UserRepository } from './user.repository';
 import { UserInDto } from './dto/user-in.dto';
 import { FindConditions } from 'typeorm';
@@ -8,15 +8,15 @@ import { FindConditions } from 'typeorm';
 export class UserService {
     constructor(public readonly userRepository: UserRepository) {}
 
-    findUser(findData: FindConditions<UserEntity>): Promise<UserEntity> {
+    findUser(findData: FindConditions<User>): Promise<User> {
         return this.userRepository.findOne(findData);
     }
 
-    findUsers(findData: FindConditions<UserEntity>): Promise<UserEntity[]> {
+    findUsers(findData: FindConditions<User>): Promise<User[]> {
         return this.userRepository.find(findData);
     }
 
-    async createUser(userInDto: UserInDto): Promise<UserEntity> {
+    async createUser(userInDto: UserInDto): Promise<User> {
         const user = this.userRepository.create(userInDto);
         return this.userRepository.save(user);
     }

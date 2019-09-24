@@ -4,6 +4,7 @@ import { UserModule } from './modules/user/user.module';
 import { SharedModule } from './shared/shared.module';
 import { ConfigService } from './shared/services/config.service';
 import { AuthModule } from './modules/auth/auth.module';
+import { FeedbackModule } from './modules/feedback/feedback.module';
 
 @Module({
     imports: [
@@ -15,6 +16,7 @@ import { AuthModule } from './modules/auth/auth.module';
         }),
         AuthModule,
         UserModule,
+        FeedbackModule,
     ],
     controllers: [],
     providers: [],
