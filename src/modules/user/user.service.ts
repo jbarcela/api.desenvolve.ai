@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common/decorators';
 import { User } from './user.entity';
 import { UserRepository } from './user.repository';
 import { UserInDto } from './dto/user-in.dto';
-import { FindConditions } from 'typeorm';
+import { FindConditions, QueryRunner, SelectQueryBuilder } from 'typeorm';
 
 @Injectable()
 export class UserService {
@@ -14,6 +14,13 @@ export class UserService {
 
     findUsers(findData: FindConditions<User>): Promise<User[]> {
         return this.userRepository.find(findData);
+    }
+
+    createQueryBuilder(
+        alias: string = 'user',
+        queryRunner?: QueryRunner,
+    ): SelectQueryBuilder<User> {
+        return this.userRepository.createQueryBuilder(alias, queryRunner);
     }
 
     async createUser(userInDto: UserInDto): Promise<User> {

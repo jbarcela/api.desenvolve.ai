@@ -6,8 +6,10 @@ import { UserRepository } from '../user/user.repository';
 
 @Injectable()
 export class FeedbackService {
-    constructor(public readonly feedbackRepository: FeedbackRepository,
-                public readonly userRepository: UserRepository) {}
+    constructor(
+        public readonly feedbackRepository: FeedbackRepository,
+        public readonly userRepository: UserRepository,
+    ) {}
 
     async create(feedbackInDto: FeedbackInDto): Promise<Feedback> {
         const feedback = this.feedbackRepository.create(feedbackInDto);
@@ -29,8 +31,12 @@ export class FeedbackService {
         return this.feedbackRepository.findByReceiver(userReceiverId);
     }
 
-    private async _validatePointsToDonate(feedbackInDto: FeedbackInDto): Promise<boolean> {
-        const user = await this.userRepository.findOne({id: feedbackInDto.userDonatorId});
+    private async _validatePointsToDonate(
+        feedbackInDto: FeedbackInDto,
+    ): Promise<boolean> {
+        const user = await this.userRepository.findOne({
+            id: feedbackInDto.userDonatorId,
+        });
         return user.points > feedbackInDto.points;
     }
 }

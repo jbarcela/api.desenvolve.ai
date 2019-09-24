@@ -35,4 +35,21 @@ export class User extends AbstractEntity<UserOutDto> {
     feedbacksAsReceiver: Feedback[];
 
     dtoClass = UserOutDto;
+
+    constructor(
+        name: string,
+        email: string,
+        password: string,
+        points: number,
+        receivedPoints: number,
+        username: string,
+    ) {
+        super();
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.points = points;
+        this.receivedPoints = receivedPoints;
+        this.username = username;
+    }
 }
