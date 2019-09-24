@@ -32,9 +32,7 @@ export class FeedbackService {
         return this.feedbackRepository.findByReceiver(userReceiverId);
     }
 
-    private async _validatePointsToDonate(
-        feedbackInDto: FeedbackInDto,
-    ): Promise<boolean> {
+    private async _validatePointsToDonate(feedbackInDto: FeedbackInDto): Promise<boolean> {
         const user = await this.userRepository.findOne({
             id: feedbackInDto.userDonatorId,
         });
