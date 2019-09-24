@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { FeedbackInDto } from './dto/feedback-in.dto';
 import { FeedbackDto } from './dto/feedback.dto';
 import { FeedbackService } from './feedback.service';
@@ -24,5 +24,17 @@ export class FeedbackController {
         return feedbacks.map((feedback: Feedback) => {
             return feedback.toDto();
         });
+    }
+
+    @Get('/donator/:userDonadorId')
+    async  JONATHAN_SUBSTITUI_1(@Param() params): Promise<FeedbackDto[]> {
+        const listFeedback = await this.feedbackService.listDonatorFeedbacks(params.userDonadorId);
+        return listFeedback.map(l => l.toDto());
+    }
+
+    @Get('/receiver/:userReceiverId')
+    async  JONATHAN_SUBSTITUI_2(@Param() params): Promise<FeedbackDto[]> {
+        const listFeedback = await this.feedbackService.listReceiverFeedbacks(params.userReceiverId);
+        return listFeedback.map(l => l.toDto());
     }
 }
