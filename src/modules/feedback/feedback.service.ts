@@ -11,4 +11,8 @@ export class FeedbackService {
         const feedback = this.feedbackRepository.create(feedbackInDto);
         return this.feedbackRepository.save(feedback);
     }
+
+    async getAllFeedbacks(): Promise<Feedback[]> {
+        return this.feedbackRepository.find();
+    }
 }

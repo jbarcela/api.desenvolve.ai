@@ -11,17 +11,17 @@ export class Feedback extends AbstractEntity<FeedbackDto> {
     @Column()
     message: string;
 
-    @Column({ name: 'user_receiver_id' })
+    @Column({ name: 'user_donator_id' })
     userDonatorId: string;
 
-    @Column({ name: 'user_donator_id' })
+    @Column({ name: 'user_receiver_id' })
     userReceiverId: string;
 
-    @ManyToOne(type => User, user => user.feedbacksAsReceiver)
+    @ManyToOne(() => User, user => user.feedbacksAsReceiver, { eager: true })
     @JoinColumn({ name: 'user_receiver_id' })
     userReceiver: User;
 
-    @ManyToOne(type => User, user => user.feedbacksAsDonator)
+    @ManyToOne(() => User, user => user.feedbacksAsDonator, { eager: true })
     @JoinColumn({ name: 'user_donator_id' })
     userDonator: User;
 
