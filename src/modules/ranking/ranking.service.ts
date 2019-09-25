@@ -5,12 +5,10 @@ export class RankingService {
     constructor(public readonly userService: UserService) {}
 
     getTop10(): Promise<User[]> {
-        const usersTop10 = this.userService
+        return this.userService
             .createQueryBuilder()
             .orderBy('user.receivedPoints', 'DESC')
             .take(10)
             .getMany();
-
-        return usersTop10;
     }
 }
