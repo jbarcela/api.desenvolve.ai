@@ -1,5 +1,6 @@
 import * as dotenv from 'dotenv';
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
+import { MailerOptions, HandlebarsAdapter } from '@nest-modules/mailer';
 
 export class ConfigService {
     constructor() {
@@ -44,5 +45,30 @@ export class ConfigService {
             migrationsRun: true,
             logging: this.nodeEnv === 'development',
         };
+    }
+
+    get mailerConfig(): MailerOptions {
+        const templatesDir = __dirname + '/../../modules/mail/templates';
+
+        return {
+            transport: {
+                host: this.get('MAIL_SMTP'),
+                port: this.getNumber('MAIL_PORT'),
+                auth: {
+                    user: this.get('MAIL_USER'),
+                    pass: this.get('MAIL_PASSWORD')
+                }
+            },
+            defaults: {
+                from: 'desenvolve.ai <contato@desenvolveaistudio.com.br>'
+            },
+            template: {
+                dir: templatesDir,
+                adapter: new HandlebarsAdapter(),
+                options: {
+                    strict: true
+                }
+            }
+        }
     }
 }

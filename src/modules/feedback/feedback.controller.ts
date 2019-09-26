@@ -4,11 +4,14 @@ import { FeedbackDto } from './dto/feedback.dto';
 import { FeedbackService } from './feedback.service';
 import { ApiUseTags } from '@nestjs/swagger';
 import { Feedback } from './feedback.entity';
+import {MailService} from "../mail/mail.service";
 
 @Controller('feedbacks')
 @ApiUseTags('feedbacks')
 export class FeedbackController {
-    constructor(public readonly feedbackService: FeedbackService) {}
+    constructor(
+        public readonly feedbackService: FeedbackService,
+    ) {}
 
     @Post()
     async create(@Body() feedbackInDto: FeedbackInDto): Promise<FeedbackDto> {
@@ -21,9 +24,7 @@ export class FeedbackController {
     @Get()
     async getAll(): Promise<FeedbackDto[]> {
         const feedbacks = await this.feedbackService.getAllFeedbacks();
-        return feedbacks.map((feedback: Feedback) => {
-            return feedback.toDto();
-        });
+        return feedbacks.map(f => f.toDto());
     }
 
     @Get('/donator/:userDonadorId')
