@@ -27,4 +27,8 @@ export class UserService {
         const user = this.userRepository.create(userInDto);
         return this.userRepository.save(user);
     }
+
+    async saveUser(user: User): Promise<User> {
+        return this.userRepository.save(user);
+    }
 }

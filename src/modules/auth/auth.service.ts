@@ -10,6 +10,8 @@ import { UserService } from '../user/user.service';
 import { TokenDto } from './dto/token.dto';
 import { LoginInDto } from './dto/login-in.dto';
 import { User } from '../user/user.entity';
+
+import * as crypto from 'crypto';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
@@ -41,5 +43,19 @@ export class AuthService {
         }
 
         return user;
+    }
+
+    async forgotPassword(email: string): Promise<any> {
+        const user = await this.userService.findUser({ email: email });
+        console.table(user);
+        if(!user)
+            throw new NotFoundException('User was not found');
+
+        const resetToken = crypto.randomBytes(15).toString('hex');
+
+        user.resetToken = resetToken;
+        user.resetTokenDate = new Date();
+
+        await this.userService.saveUser(user);
     }
 }

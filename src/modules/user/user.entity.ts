@@ -28,6 +28,12 @@ export class User extends AbstractEntity<UserOutDto> {
     @Column({ type: 'enum', enum: RoleType, default: RoleType.User })
     role: RoleType;
 
+    @Column({ name: 'reset_token', nullable: true})
+    resetToken: string;
+
+    @Column({ name: 'reset_token_date', type: "timestamp with time zone", nullable: true})
+    resetTokenDate: Date;
+
     @OneToMany(type => Feedback, feedback => feedback.userDonator)
     feedbacksAsDonator: Feedback[];
 
