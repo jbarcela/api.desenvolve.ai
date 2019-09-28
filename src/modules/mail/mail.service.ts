@@ -5,14 +5,15 @@ import {MailerService} from "@nest-modules/mailer";
 export class MailService {
     constructor(private readonly mailerService: MailerService) {}
 
-    async sendHelloMail(): Promise<void> {
+    async sendPasswordResetEmail(email: string, resetToken: string, redirectUrl: string): Promise<void> {
         await this.mailerService.sendMail({
-            to: 'teste@teste.com',
-            subject: 'Hello :)',
-            template: 'hello',
+            to: email,
+            subject: 'Recuperação de senha - Desenvolve.ai',
+            template: 'password-reset',
             context: {
-                title: 'Hello',
-                body: 'WORLD!'
+                email: email,
+                token: resetToken,
+                link: redirectUrl
             }
         })
     }

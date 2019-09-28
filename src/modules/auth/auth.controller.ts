@@ -1,4 +1,4 @@
-import {Body, Controller, NotFoundException, Post} from '@nestjs/common';
+import {Body, Controller, HttpStatus, NotFoundException, Post} from '@nestjs/common';
 import { ApiOkResponse, ApiUseTags } from '@nestjs/swagger';
 import { UserService } from '../user/user.service';
 import { AuthService } from './auth.service';
@@ -30,10 +30,12 @@ export class AuthController {
     }
 
     @Post('forgot')
-    async forgotPassword(@Body() resetInDto: ForgotInDto) : Promise<any> {
-        const reset = await this.authService.forgotPassword(resetInDto.email);
+    async forgotPassword(@Body() forgotInDto: ForgotInDto) : Promise<any> {
+        await this.authService.forgotPassword(forgotInDto);
 
-        return "";
+        return {
+            message: "Recuperação de senha realizada com sucesso"
+        };
     }
 
 }

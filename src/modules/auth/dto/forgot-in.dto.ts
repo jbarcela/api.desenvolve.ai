@@ -6,4 +6,8 @@ export class ForgotInDto {
     @IsEmail()
     @ApiModelProperty()
     readonly email: string;
+
+    @IsString()
+    @ApiModelProperty()
+    readonly redirectUrl: string;
 }

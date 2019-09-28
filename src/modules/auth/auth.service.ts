@@ -13,6 +13,8 @@ import { User } from '../user/user.entity';
 
 import * as crypto from 'crypto';
 import * as bcrypt from 'bcrypt';
+import {MailService} from "../mail/mail.service";
+import {ForgotInDto} from "./dto/forgot-in.dto";
 
 @Injectable()
 export class AuthService {
@@ -20,6 +22,7 @@ export class AuthService {
         public readonly jwtService: JwtService,
         public readonly configService: ConfigService,
         public readonly userService: UserService,
+        public readonly mailService: MailService,
     ) {}
 
     async createToken(id: string): Promise<TokenDto> {
@@ -45,8 +48,8 @@ export class AuthService {
         return user;
     }
 
-    async forgotPassword(email: string): Promise<any> {
-        const user = await this.userService.findUser({ email: email });
+    async forgotPassword(forgotInDto: ForgotInDto): Promise<any> {
+        const user = await this.userService.findUser({ email: forgotInDto.email });
         console.table(user);
         if(!user)
             throw new NotFoundException('User was not found');
@@ -57,5 +60,7 @@ export class AuthService {
         user.resetTokenDate = new Date();
 
         await this.userService.saveUser(user);
+
+        await this.mailService.sendPasswordResetEmail(forgotInDto.email, resetToken, forgotInDto.redirectUrl);
     }
 }
